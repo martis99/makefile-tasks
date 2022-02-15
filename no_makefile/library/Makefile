@@ -1,17 +1,21 @@
-CC:=gcc
-CFLAGS:=-Wall
-BINS:=file_reader.so calculator
+.PHONY: clean all install uninstall lib bin
 
-all: $(BINS)
+all: lib bin
 
-calculator: main.c
-	$(CC) $(CFLAGS) -o $@ $^ -L. file_reader.so
+lib:
+	$(MAKE) -C ./lib
 
-file_reader.o: file_reader.c file_reader.h
-	$(CC) $(CFLAGS) -o $@ -c file_reader.c
+bin:
+	$(MAKE) -C ./src
 
-file_reader.so: file_reader.o
-	$(CC) $(CFLAGS) -o $@ -shared file_reader.o
+install:
+	$(MAKE) -C ./lib install
+	$(MAKE) -C ./src install
+
+uninstall:
+	$(MAKE) -C ./lib uninstall
+	$(MAKE) -C ./src uninstall
 
 clean:
-	rm -f $(BINS) *.o
+	$(MAKE) -C ./lib clean
+	$(MAKE) -C ./src clean

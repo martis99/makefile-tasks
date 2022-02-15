@@ -1,18 +1,30 @@
-compiler:=gcc
-Flags:=-Wall -I.
+CC:=gcc
+CFLAGS:=-Wall
+CPPFLAGS:=-I.
 OBJS:=main.o math_functions.o
 BIN:=calculator
 
+PREFIX:=/usr
+
+.PHONY: clean all install uninstall
+
 all: $(BIN)
 
-$(BIN): main.o math_functions.o
-	$(compiler) $(Flags) -o $(BIN) main.o math_functions.o
+$(BIN): $(OBJS)
+	$(CC) -o $@ $^
 	
 main.o: main.c
-	$(compiler) $(Flags) -c main.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $^
 	
 math_functions.o: math_functions.c math_functions.h
-	$(compiler) $(Flags) -c math_functions.c
-	
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+install:
+	install -d $(PREFIX)/bin
+	install -m 555 $(BIN) $(PREFIX)/bin
+
+uninstall:
+	$(RM) $(PREFIX)/bin/$(BIN)
+
 clean:
-	rm -f $(BIN) $(OBJS)
+	$(RM) $(BIN) $(OBJS)

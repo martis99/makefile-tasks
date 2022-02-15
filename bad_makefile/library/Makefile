@@ -4,8 +4,8 @@ LIB:=calculator.so
 
 all: $(LIB)
 
-$(LIB):
-	$(CC) $(CFLAGS) -o $(LIB) $^
+$(LIB): math_functions.c
+	$(CC) $(CFLAGS) -o $(LIB) -shared $^
 
 install: $(LIB)
 	install -m 644 math_functions.h $(DESTDIR)/$(PREFIX)/include
